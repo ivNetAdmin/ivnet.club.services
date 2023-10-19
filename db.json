@@ -1,0 +1,33 @@
+{
+  "codes": [
+    {
+      "id": 1,
+      "code": "TLBC01",
+      "name": "Tring Lawn Bowls Club"
+    },
+    {
+      "id": 2,
+      "code": "FHIBC1",
+      "name": "Foxhill Indoor Bowls Club"
+    }
+  ],
+  "users": [
+    {
+      "id": "0d491040-6e82-11ee-9d95-832aace884ba",
+      "clubCode": "TLBC01",
+      "clubName": "Tring Lawn Bowls Club",
+      "userName": "bp",
+      "pw": "123",
+      "email": "bp@ivnet.co.uk"
+    }
+  ],
+  "userdetails": [
+    {
+      "id": "0d491040-6e82-11ee-9d95-832aace884ba",
+      "fullName": "Brian Paske",
+      "telephone": "07931 706 799",
+      "dietary": "None",
+      "medical": "Gout"
+    }
+  ]
+}
