@@ -11,7 +11,7 @@ let currentUserName = currentUser.userName
     <div class="flex flex-col items-center justify-center m-6">
         <div class="sm:w-3/4 md:w-3/4 w-full">
             <PageTitle name="Club Services" :backIcon="false">
-                Please select the service you want
+                Please select the service you want or  <FormRouter route="/" display="Log Out" />  
             </PageTitle>   
             
             <div class="grid-cols-1 sm:grid md:grid-cols-3">
@@ -27,6 +27,17 @@ let currentUserName = currentUser.userName
                     </template>
                     <template v-slot:link>
                         <FormRouter route="cpw" display="Change Password" />  
+                    </template>
+                </ServiceCard>
+
+                <ServiceCard title="Rink Booking" link="rinkbooking">
+                    <template v-slot:icon>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" class="w-20 h-20">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </template>
+                    <template v-slot:description>
+                        Rink booking form
                     </template>
                 </ServiceCard>
 

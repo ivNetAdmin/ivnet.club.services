@@ -26,13 +26,13 @@
 
    function logOn(){
 
-      // var json=jsonMock()
-      // checkAuth(json)
-      // return
+      var json=jsonMock()
+      checkAuth(json)
+      return
 
-      fetch('http://localhost:3001/users?userName='+currentUser.userName)
-            .then(response => response.json())
-            .then(json => checkAuth(json));
+      // fetch('http://localhost:3001/users?userName='+currentUser.userName)
+      //       .then(response => response.json())
+      //       .then(json => checkAuth(json));
 
    }
 

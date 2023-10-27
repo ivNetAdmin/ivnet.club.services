@@ -53,7 +53,7 @@
         }else{
             currentUser.pw = oldpw
         }
-        }
+    }
 
 </script>
 

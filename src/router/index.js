@@ -4,13 +4,13 @@ import { currentUser } from '@/stores/currentUserStore.js'
 
 function guardMyroute(to, from, next)
 {
- if(currentUser.authenticated == 'true') 
+ if(currentUser.authenticated != 'true') 
  {
-  next(); // allow to enter route
+  next('/'); // go to login
  } 
  else
  {
-  next('/'); // go to login
+  next(); // allow to enter route
  }
 }
 
@@ -46,6 +46,12 @@ const router = createRouter({
       name: 'personaldetails',
       beforeEnter : guardMyroute,
       component: () => import('../views/PersonalDetailsView.vue')
+    },
+    {
+      path: '/rinkbooking',
+      name: 'rinkbooking',
+      beforeEnter : guardMyroute,
+      component: () => import('../views/RinkBookingView.vue')
     },
     {
       path: '/fixturelist',

@@ -29,5 +29,87 @@
       "dietary": "None",
       "medical": "Gout"
     }
+  ],
+  "bookings": [
+    {
+      "id": "0d491040-6e82-11ee-9d95-832aabb884ba",
+      "weekid": 43,
+      "dayid": 1,
+      "timeid": 1230,
+      "displayWeek": "16-22 Oct",
+      "day": "Mon",
+      "time": "12:30-14:30",
+      "bookedBy": "bp"
+    },
+    {
+      "id": "0d491020-6e82-11ee-9d95-832aabb884ba",
+      "weekid": 43,
+      "dayid": 1,
+      "timeid": 1630,
+      "displayWeek": "16-22 Oct",
+      "day": "Mon",
+      "time": "16:30-18:30",
+      "bookedBy": "bp"
+    },
+    {
+      "id": "0d491040-6e99-11ee-9d95-832aabb884ba",
+      "weekid": 43,
+      "dayid": 2,
+      "timeid": 1230,
+      "displayWeek": "16-22 Oct",
+      "day": "Tue",
+      "time": "12:30-14:30",
+      "bookedBy": "cakes"
+    },
+    {
+      "id": "0d451040-6e99-11ee-9d95-832nbbb884ba",
+      "weekid": 43,
+      "dayid": 3,
+      "timeid": 1230,
+      "displayWeek": "16-22 Oct",
+      "day": "Wed",
+      "time": "12:30-14:30",
+      "bookedBy": "bp"
+    },
+    {
+      "id": "0d492040-6e99-11ee-9d95-832nbbb884ba",
+      "weekid": 43,
+      "dayid": 3,
+      "timeid": 1430,
+      "displayWeek": "16-22 Oct",
+      "day": "Wed",
+      "time": "14:30-16:30",
+      "bookedBy": ""
+    },
+    {
+      "id": "0d491040-6e99-11ee-9d95-832nbbb884ba",
+      "weekid": 43,
+      "dayid": 4,
+      "timeid": 1030,
+      "displayWeek": "16-22 Oct",
+      "day": "Thu",
+      "time": "10:30-12:30",
+      "bookedBy": "bp"
+    },
+    {
+      "id": "0d491041-6e99-11ee-9d95-832nbbb884ba",
+      "weekid": 43,
+      "dayid": 4,
+      "timeid": 1630,
+      "displayWeek": "16-22 Oct",
+      "day": "Thu",
+      "time": "16:30-18:30",
+      "bookedBy": "bp"
+    },
+    {
+      "id": "0d491041-6e99-11je-9d95-832nbbb884ba",
+      "weekid": 43,
+      "dayid": 5,
+      "timeid": 1230,
+      "displayWeek": "16-22 Oct",
+      "day": "Fri",
+      "time": "12:30-14:30",
+      "bookedBy": "cakes"
+    }
   ]
 }
