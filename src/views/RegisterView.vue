@@ -1,109 +1,193 @@
 <script setup>
+  import { uuid } from 'vue-uuid'
+  import { useRouter } from 'vue-router'
+  import { useVuelidate } from '@vuelidate/core';
+  import { minLength } from '@vuelidate/validators';
+  import { currentUser } from '@/stores/currentUserStore.js'
+  import { service } from '@/stores/serviceStore.js'
+  import { ref, onMounted,reactive, computed, inject } from "vue";
+
   import PageTitle  from '@/components/PageTitle.vue'
   import FormRow from '@/components/FormRow.vue'
   import FormButton from '@/components/FormButton.vue'
-  import { useRouter } from 'vue-router'
-  import { currentUser } from '@/stores/currentUserStore.js'
-  import { uuid } from 'vue-uuid'
-  import { ref, onMounted } from "vue"
-  const router = useRouter()
+  import UserErrorMessage from '@/components/UserErrorMessage.vue';
+ 
+  const cryptojs = inject('cryptojs');
 
-  let codeValidMessage = ref('')
-  let pwValidMessage = ref('')
-  let emailValidMessage = ref('')
-  let isActive = ref(true)
+  const router = useRouter();
+
+  const state = reactive({
+      password: {
+         pass: ''
+      }
+   });
+
+   const rules = computed(()=>{
+      return {
+         password: {
+            pass: { minLength: minLength(6), pw_validation: {
+              $validator: validPassword
+            } }
+         }
+      };
+   });
+
+  const v$ = useVuelidate(rules, state);
+
+  let serviceUrl = service.url;
+  let cryptoKey = service.key;
+  let cryptoIv = service.iv;
+
+  let userErrorMessage = ref('');
+
+  let codeValidMessage = ref('');
+  let pwValidMessage = ref('');
+  let rptpwValidMessage = ref('');
+  let emailValidMessage = ref('');
+  let isActive = ref(true);
 
   onMounted(() => {
     resetCurrentUser()
   })
 
+  function validPassword(pw)
+  {
+    let validationPattern = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$");
+    if(validationPattern.test(pw)) return true;
+    return false;
+  }
+
   function resetCurrentUser()
    {
-      currentUser.updateProp('authenticated','')
-      currentUser.updateProp('id','')
-      currentUser.updateProp('userName','')
-      currentUser.updateProp('clubCode','')
-      currentUser.updateProp('clubName','')
-      currentUser.updateProp('email','')
+      currentUser.updateProp('authenticated','');
+      currentUser.updateProp('id','');
+      currentUser.updateProp('userName','');
+      currentUser.updateProp('clubCode','');
+      currentUser.updateProp('clubName','');
+      currentUser.updateProp('email','');
    }
 
-  function register(){
+  async function register(){
 
-    fetch('http://localhost:3001/users?email='+currentUser.email+'&clubCode='+currentUser.clubCode.toUpperCase())
-      .then(response => response.json())
-      .then(json => {
-        if(json.length > 0)
-        {
-          emailValidMessage.value = "--- This email is already in use !!"
-        }else{
-          if(currentUser.pw==currentUser.rptpw)
-          {
-            fetch("http://localhost:3001/users", {
-              method: "POST",
-              body: JSON.stringify({
-                "id": uuid.v1(),
-                "clubCode": currentUser.clubCode.toUpperCase(),
-                "clubName": currentUser.clubName,
-                "userName": currentUser.userName,
-                "pw": currentUser.pw,
-                "email": currentUser.email
-              }),
-              headers: {
-                  "Content-type": "application/json; charset=UTF-8"
-              }
-            })
-            // Converting to JSON
-            .then(response => response.json())
-            .then(json => setAuth(json));
-            }else{
-              pwValidMessage.value="--- Passwords must match !!"
-            }
+    state.password.pass = currentUser.pw;
+    state.password.confirm = currentUser.rptpw;
+
+    v$.value.$validate();
+    
+    clearInput('');
+
+    if(v$.value.$error)
+    {
+        v$.value.$errors.forEach(function(value){
+        switch(value.$property)
+        { 
+          case "pass":
+          pwValidMessage.value="--- Password is not valid !!";
+          break;          
         }
-      })
+      });
+    }else{
+      await fetch(serviceUrl + 'users/email/'+currentUser.email+'/clubcode/'+currentUser.clubCode.toUpperCase())
+        .then(response =>{
+               if(response.ok)
+               {
+                  return response.json();
+               }else{
+                  return response.status;
+               }
+            })
+        .then(async json => {
+
+          if(json===500) 
+          {
+            userErrorMessage.value = 'A Server error has occurred. Please contact your Administrator'
+            return;
+          }
+          if(json!==404)
+          {
+            emailValidMessage.value = "--- This email is already in use !! ["+json[0].email+"]";
+          }else{
+            if(currentUser.pw==currentUser.rptpw)
+            {
+              await fetch(serviceUrl + 'users', {
+                method: "POST",
+                body: JSON.stringify({
+                  "id": uuid.v1(),
+                  "clubCode": currentUser.clubCode.toUpperCase(),
+                  "clubName": currentUser.clubName,
+                  "userName": currentUser.userName,
+                  "pw": encryptPw(currentUser.pw),
+                  "email": currentUser.email
+                },null, 0),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+              })
+              // Converting to JSON
+              .then(response => response.json())
+              .then(setAuth());
+              }else{
+                rptpwValidMessage.value="--- Passwords must match !!";
+              }
+          }
+        });
+      }
    }
 
-   function setAuth(json)
+   function encryptPw(pw)
    {
-        currentUser.updateProp('id',json.id)
+    var key = cryptojs.enc.Base64.parse(cryptoKey);
+    var iv  = cryptojs.enc.Base64.parse(cryptoIv);
+    return "'" + cryptojs.AES.encrypt(pw, key, {iv: iv}) + "'";
+   }
+
+   function setAuth()
+   {
         currentUser.updateProp('authenticated','true')
+        currentUser.updateProp('pw','')
+        currentUser.updateProp('rptpw','')
         router.push({ name: 'services' }) 
    }
 
-   function clubCodeLookup()
+   async function clubCodeLookup()
    {
-    fetch('http://localhost:3001/codes?code='+currentUser.clubCode.toUpperCase())
+    await fetch(serviceUrl + 'clubcodes/code/'+currentUser.clubCode.toUpperCase())
             .then(response => response.json())
             .then(json => checkCode(json));
    }
+
    function clearInput(inputName)
    {
       switch(inputName)
       {
         case "code":
-        codeValidMessage.value = ""
+        codeValidMessage.value = "";
         break;
         case "pw":
-        pwValidMessage.value = ""
+        pwValidMessage.value = "";
+        rptpwValidMessage.value = "";
         break;
         case "rptpw":
         pwValidMessage.value = ""
+        rptpwValidMessage.value = ""
         break;
         case "email":
-        emailValidMessage.value = ""
+        emailValidMessage.value = "";
         break;
       }
+      userErrorMessage.value = "";
    }
 
    function checkCode(json)
    {
-    if (json.length!=1)
+    if (json===null)
     {
       currentUser.updateProp('clubCode','')
       codeValidMessage.value="--- Invalid !!"
       isActive.value = true
     }else{
       isActive.value = false
-      currentUser.updateProp('clubName',json[0].name)
+      currentUser.updateProp('clubName',json.name)
     }
    }
 </script>
@@ -127,7 +211,7 @@
               :msg="codeValidMessage">
                 A code given to you by your club
               </FormRow> 
-              <FormRow name="userName" display="User name" type="text">
+              <FormRow name="username" display="User name" type="text">
                 Make up a username rather than an eMail to log on
               </FormRow>
               <FormRow 
@@ -144,7 +228,8 @@
               name="pw" 
               display="Password" 
               type="password" 
-              required="true">
+              required="true"
+              :msg="pwValidMessage">
                 Length 6+, uppercase, lowercase, numbers, special characters
               </FormRow>
               <FormRow 
@@ -153,7 +238,7 @@
               display="Confirm Password" 
               type="password" 
               required="true"
-              :msg="pwValidMessage">
+              :msg="rptpwValidMessage">
                 Confirm your password
               </FormRow>
             </div>
@@ -162,6 +247,7 @@
             :class="{ 'opacity-25 cursor-not-allowed': isActive }"
             type="submit">Register</FormButton>                      
           </form>
+          <UserErrorMessage :msg="userErrorMessage" />
       </div>
     </div>
   </template>

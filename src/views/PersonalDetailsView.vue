@@ -1,14 +1,21 @@
 <script setup>
-import PageTitle  from '@/components/PageTitle.vue'
-import FormRow from '@/components/FormRow.vue'
-import FormButton from '@/components/FormButton.vue'
-import { onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useRouter } from 'vue-router'
 import { currentUser } from '@/stores/currentUserStore.js'
 import { userDetail } from '@/stores/userDetailStore.js'
+import { service } from '@/stores/serviceStore.js'
+
+import PageTitle  from '@/components/PageTitle.vue'
+import FormRow from '@/components/FormRow.vue'
+import FormButton from '@/components/FormButton.vue'
+import UserErrorMessage from '@/components/UserErrorMessage.vue';
+
+let serviceUrl = service.url
+
+let userErrorMessage = ref('');
 
 //let currentUserLink = "personalInfo?"+currentUser.id
-//let currentUserName = currentUser.userName
+let currentusername = currentUser.userName
 
 const router = useRouter()
 
@@ -18,32 +25,51 @@ onMounted(() => {
 
   function getCurrentUserDetails()
   {
-      fetch('http://localhost:3001/userdetails?'+currentUser.id)
-            .then(response => response.json())
+    if(currentUser===null || currentUser.id === '') router.push({ name: 'home' }) 
+
+    fetch(serviceUrl+'users/'+currentUser.id)
+            .then(response =>{
+               if(response.ok)
+               {
+                  return response.json();
+               }else{
+                  return response.status;
+               }
+            })
             .then(json => mapUserDetails(json));
   }
 
   function mapUserDetails(json)
-   {    
-        if(json.length > 0)
+   {
+        if(json===404)
         {
-            userDetail.updateProp('id',json[0].id)
-            userDetail.updateProp('fullName',json[0].fullName)
-            userDetail.updateProp('telephone',json[0].telephone)
-            userDetail.updateProp('dietary',json[0].dietary)
-            userDetail.updateProp('medical',json[0].medical)
+            userErrorMessage.value = 'A Server error the system cannot find your registration details'
+            return;
+        };
+
+        if(json===500) 
+        {
+            userErrorMessage.value = 'A Server error has occurred. Please contact your Administrator'
+            return;
         }
+
+        userDetail.updateProp('id',json.id)
+        userDetail.updateProp('fullname',json.fullname)
+        userDetail.updateProp('telephone',json.telephone)
+        userDetail.updateProp('dietary',json.dietary)
+        userDetail.updateProp('medical',json.medical)
+        
    }
 
   function updatePersonalDetails()
   {
-    if(userDetail.id.length > 0)
-    {
-        fetch("http://localhost:3001/userdetails/"+userDetail.id, {
-            method: "PUT",
+    //if(userDetail.id.length > 0)
+    //{
+        fetch(serviceUrl + 'users/'+userDetail.id, {
+            method: "PATCH",
             body: JSON.stringify({
             "id": userDetail.id,
-            "fullName": userDetail.fullName,
+            "fullname": userDetail.fullname,
             "telephone": userDetail.telephone,
             "dietary": userDetail.dietary,
             "medical": userDetail.medical,
@@ -53,21 +79,21 @@ onMounted(() => {
             }
         })
 
-    }else{
-        fetch("http://localhost:3001/userdetails", {
-            method: "POST",
-            body: JSON.stringify({
-            "id": currentUser.id,
-            "fullName": userDetail.fullName,
-            "telephone": userDetail.telephone,
-            "dietary": userDetail.dietary,
-            "medical": userDetail.medical,
-            }),
-            headers: {
-                "Content-type": "application/json"
-            }
-        })
-    }
+    // }else{
+    //     fetch("serviceUrl + 'userdetails'", {
+    //         method: "POST",
+    //         body: JSON.stringify({
+    //         "id": currentUser.id,
+    //         "fullname": userDetail.fullname,
+    //         "telephone": userDetail.telephone,
+    //         "dietary": userDetail.dietary,
+    //         "medical": userDetail.medical,
+    //         }),
+    //         headers: {
+    //             "Content-type": "application/json"
+    //         }
+    //     })
+    // }
     router.push({ name: 'services' }) 
   }
 
@@ -77,11 +103,11 @@ onMounted(() => {
     <div class="flex flex-col items-center justify-center m-6">
         <div class="sm:w-3/4 md:w-1/3 w-full">
             <PageTitle name="Personal Information">
-                Please update you personal details
+                Please update you personal details <span class=" text-sky-600">{{ currentusername }}</span>
             </PageTitle>   
             <form @submit.prevent="updatePersonalDetails">
                 <div class="flex flex-col justify-center items-center">
-                    <FormRow name="fullName" display="Fullname" type="text" :value="userDetail.fullName">
+                    <FormRow name="fullname" display="fullname" type="text" :value="userDetail.fullname">
                         This will be used for the members handbook  
                     </FormRow>
                     <FormRow name="telephone" display="Telephone" type="text" :value="userDetail.telephone">
@@ -98,6 +124,7 @@ onMounted(() => {
                     type="submit">Update Details
                 </FormButton>
             </form>
+            <UserErrorMessage :msg="userErrorMessage" />
         </div>
     </div>
 </template>

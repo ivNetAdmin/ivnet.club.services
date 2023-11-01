@@ -3,7 +3,7 @@ import PageTitle  from '@/components/PageTitle.vue'
 //import { currentUser } from '@/stores/currentUserStore.js'
 
 //let currentUserLink = "personalInfo?"+currentUser.id
-//let currentUserName = currentUser.userName
+//let currentusername = currentUser.username
 </script>
 
 <template>

@@ -4,13 +4,10 @@ export let userDetail = reactive({
 
     //state
     id: '',
-    fullName: '',
-    // clubName: '',
-    // userName: '',
-    // name: '',
-    // pw: '',
-    // rptpw: '',
-    // email: '',
+    fullname: '',
+    telephone: '',
+    dietary: '',
+    medical: '',
 
     //actions
     updateProp(propName, value){
@@ -18,9 +15,9 @@ export let userDetail = reactive({
         {
             case 'id':
                 this.id = value
-                break;            
-            case 'fullName':
-                this.fullName = value
+                break;           
+            case 'fullname':
+                this.fullname = value
                 break;
             case 'telephone':
                 this.telephone = value

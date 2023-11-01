@@ -1,64 +1,98 @@
 <script setup>
-   import PageTitle  from '@/components/PageTitle.vue'
-   import FormRow from '@/components/FormRow.vue'
-   import FormRouter from '@/components/FormRouter.vue'
-   import FormButton from '@/components/FormButton.vue'
-   import { useRouter } from 'vue-router'
-   import { onMounted } from "vue"
 
-   import { currentUser } from '@/stores/currentUserStore.js'
+   import { useRouter } from 'vue-router';
+   import { onMounted, inject, ref } from "vue";
+   import { service } from '@/stores/serviceStore.js';
+   import { currentUser } from '@/stores/currentUserStore.js';
 
-   const router = useRouter()
+   import PageTitle  from '@/components/PageTitle.vue';
+   import FormRow from '@/components/FormRow.vue';
+   import FormRouter from '@/components/FormRouter.vue';
+   import FormButton from '@/components/FormButton.vue';
+   import UserErrorMessage from '@/components/UserErrorMessage.vue';
+  
+   const cryptojs = inject('cryptojs');
+
+   const router = useRouter();
+   
+   let userErrorMessage = ref('');
+
+   let serviceUrl = service.url;
+   let cryptoKey = service.key;
+   let cryptoIv = service.iv;
 
    onMounted(() => {
-    resetCurrentUser()
-  })
+    resetCurrentUser();
+  });
 
   function resetCurrentUser()
    {
-      currentUser.updateProp('authenticated','')
-      currentUser.updateProp('id','')
-      currentUser.updateProp('userName','')
-      currentUser.updateProp('clubCode','')
-      currentUser.updateProp('clubName','')
-      currentUser.updateProp('email','')
-   }
+      currentUser.updateProp('authenticated','');
+      currentUser.updateProp('id','');
+      currentUser.updateProp('userName','');
+      currentUser.updateProp('clubCode','');
+      currentUser.updateProp('clubName','');
+      currentUser.updateProp('email','');
+   };
 
-   function logOn(){
+    function logOn(){
 
-      var json=jsonMock()
-      checkAuth(json)
-      return
+       fetch(serviceUrl+'users/username/'+currentUser.userName)
+            .then(response =>{
+               if(response.ok)
+               {
+                  return response.json();
+               }else{
+                  return response.status;
+               }
+            })
+            .then(json => checkAuth(json));
 
-      // fetch('http://localhost:3001/users?userName='+currentUser.userName)
-      //       .then(response => response.json())
-      //       .then(json => checkAuth(json));
-
-   }
+   };
 
    function checkAuth(json)
    {
-      currentUser.updateProp('authenticated','false')
-      if(json.length==1 && json[0].pw == currentUser.pw) 
+      if(json===404) return;
+
+      if(json===500) 
       {
-         mapCurrentUser(json)
-         router.push({ name: 'services' }) 
+         userErrorMessage.value = 'A Server error has occurred. Please contact your Administrator'
+         return;
       }
+
+      var pw = decryptPw(json.pw);
+      currentUser.updateProp('authenticated','false');
+      if(json != null && pw == currentUser.pw) 
+      {
+         mapCurrentUser(json);
+         router.push({ name: 'services' }); 
+      }
+   }
+
+   function decryptPw(pw)
+   {
+      pw = pw.substring(1);
+      pw = pw.substring(0,pw.length-1);
+
+      var key = cryptojs.enc.Base64.parse(cryptoKey);
+      var iv  = cryptojs.enc.Base64.parse(cryptoIv);
+      return cryptojs.AES.decrypt(pw, key, {iv: iv}).toString(cryptojs.enc.Utf8)
    }
 
    function mapCurrentUser(json)
    {
-      currentUser.updateProp('authenticated','true')
-      currentUser.updateProp('id',json[0].id)
-      currentUser.updateProp('userName',json[0].userName)
-      currentUser.updateProp('clubCode',json[0].clubCode)
-      currentUser.updateProp('clubName',json[0].clubName)
-      currentUser.updateProp('email',json[0].email)
-   }
-
-   function jsonMock()
+      currentUser.updateProp('authenticated','true');
+      currentUser.updateProp('id',json.id);
+      currentUser.updateProp('userName',json.userName);
+      currentUser.updateProp('clubCode',json.clubCode);
+      currentUser.updateProp('clubName',json.clubName);
+      currentUser.updateProp('email',json.email);
+      currentUser.updateProp('pw','');
+   };
+   
+   function clearInput()
    {
-      return JSON.parse('[{"id":"1892d900-69b8-11ee-ae7b-2b54b3e656db","clubCode":"TLBC01","clubName":"Tring Lawn Bowls Club","userName":"bp","pw":"123","name":"","email":"bp@ivnet.co.uk"}]')
+      userErrorMessage.value = '';
    }
 
 </script>
@@ -71,8 +105,8 @@
          </PageTitle>        
          <form @submit.prevent="logOn">
             <div class="flex flex-col justify-center items-center">
-               <FormRow name="userName" display="Username or eMail" type="text" required="true" />
-               <FormRow name="pw" display="Password" type="password" required="true"/>
+               <FormRow  @keydown="clearInput()"  name="userName" display="Username or eMail" type="text" required="true" />
+               <FormRow name="pw" display="Password" type="password" required="true" />
             </div>
             <FormButton type="submit">Log On</FormButton>          
             <p class="mt-6 text-sm">If you have not registed to use these services and have been given a Club Code, then please 
@@ -80,6 +114,7 @@
                <FormRouter route="register" display="Register here" />              
             </p>
          </form>
+         <UserErrorMessage :msg="userErrorMessage" />
       </div>
    </div>
 </template>

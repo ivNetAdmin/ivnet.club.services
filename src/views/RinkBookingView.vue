@@ -2,11 +2,12 @@
 import PageTitle  from '@/components/PageTitle.vue'
 import { ref, onMounted } from "vue"
 import { currentUser } from '@/stores/currentUserStore.js'
+import { service } from '@/stores/serviceStore.js'
 
 //let currentUserLink = "personalInfo?"+currentUser.id
-let currentUserName = currentUser.userName
+let serviceUrl = service.url
 
-let serviceUrl = 'http://localhost:44335/' //http://ivnet-dev.co.uk/ - http://localhost:3001/ - https://localhost:44335/
+let currentusername = currentUser.userName
 
 var bookings = ref([])
 var displayWeek = ref('')
@@ -47,12 +48,13 @@ function getWeekNo()
 
 function isBooked(bookedBy)
 {
-    return bookedBy.length > 0
+    if( bookedBy ===null || bookedBy.length === 0) return false;
+    return true;
 }
 
 function book(e)
 {
-    fetch("http://localhost:3001/bookings/"+e.target.id, {
+    fetch(serviceUrl+e.target.id, {
         method: "PATCH",
         body: JSON.stringify({
         "id": e.target.id,
@@ -70,7 +72,7 @@ function updateBooking(json)
 {
     var booking = filterById(bookings.value['bookings'], json.id);
    
-    booking.bookedBy = currentUserName
+    booking.bookedBy = currentusername
 }
 
 function filterById(jsonObject, id) {
@@ -82,6 +84,7 @@ function filterById(jsonObject, id) {
 </script>
 
 <template>
+       {{ serviveUrl }}
    <div class="flex flex-col items-center justify-center m-6">
       <div class="sm:w-3/4 md:w-1/3 w-full">
             <PageTitle name="Rink Booking">

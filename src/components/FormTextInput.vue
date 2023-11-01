@@ -14,7 +14,6 @@
 
     function setUserProperty(e)
     {
-        
         let inputVal = e.target
         currentUser.updateProp(inputVal.name, inputVal.value)
         userDetail.updateProp(inputVal.name, inputVal.value)
