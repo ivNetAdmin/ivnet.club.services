@@ -10,22 +10,21 @@ import FormRow from '@/components/FormRow.vue'
 import FormButton from '@/components/FormButton.vue'
 import UserErrorMessage from '@/components/UserErrorMessage.vue';
 
-let serviceUrl = service.url
+let serviceUrl = service.url;
 
 let userErrorMessage = ref('');
 
-//let currentUserLink = "personalInfo?"+currentUser.id
-let currentusername = currentUser.userName
+let currentusername = currentUser.userName;
 
 const router = useRouter()
 
 onMounted(() => {
-    getCurrentUserDetails()
+    getCurrentUserDetails();
   })
 
   function getCurrentUserDetails()
   {
-    if(currentUser===null || currentUser.id === '') router.push({ name: 'home' }) 
+    if(currentUser===null || currentUser.id === '') router.push({ name: 'home' });
 
     fetch(serviceUrl+'users/'+currentUser.id)
             .then(response =>{
@@ -43,28 +42,26 @@ onMounted(() => {
    {
         if(json===404)
         {
-            userErrorMessage.value = 'A Server error the system cannot find your registration details'
+            userErrorMessage.value = 'A Server error the system cannot find your registration details';
             return;
         };
 
         if(json===500) 
         {
-            userErrorMessage.value = 'A Server error has occurred. Please contact your Administrator'
+            userErrorMessage.value = 'A Server error has occurred. Please contact your Administrator';
             return;
         }
 
-        userDetail.updateProp('id',json.id)
-        userDetail.updateProp('fullname',json.fullname)
-        userDetail.updateProp('telephone',json.telephone)
-        userDetail.updateProp('dietary',json.dietary)
-        userDetail.updateProp('medical',json.medical)
+        userDetail.updateProp('id',json.id);
+        userDetail.updateProp('fullname',json.fullname);
+        userDetail.updateProp('telephone',json.telephone);
+        userDetail.updateProp('dietary',json.dietary);
+        userDetail.updateProp('medical',json.medical);
         
    }
 
   function updatePersonalDetails()
   {
-    //if(userDetail.id.length > 0)
-    //{
         fetch(serviceUrl + 'users/'+userDetail.id, {
             method: "PATCH",
             body: JSON.stringify({
@@ -77,24 +74,8 @@ onMounted(() => {
             headers: {
                 "Content-type": "application/json"
             }
-        })
-
-    // }else{
-    //     fetch("serviceUrl + 'userdetails'", {
-    //         method: "POST",
-    //         body: JSON.stringify({
-    //         "id": currentUser.id,
-    //         "fullname": userDetail.fullname,
-    //         "telephone": userDetail.telephone,
-    //         "dietary": userDetail.dietary,
-    //         "medical": userDetail.medical,
-    //         }),
-    //         headers: {
-    //             "Content-type": "application/json"
-    //         }
-    //     })
-    // }
-    router.push({ name: 'services' }) 
+        });
+    router.push({ name: 'services' });
   }
 
 </script>

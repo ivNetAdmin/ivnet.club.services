@@ -39,6 +39,9 @@ let currentusername = currentUser.userName
                     <template v-slot:description>
                         Rink booking form
                     </template>
+                    <template v-slot:link>
+                        <FormRouter route="cpw" display="Admin" />  
+                    </template>
                 </ServiceCard>
 
                 <ServiceCard title="Fixture List" link="fixturelist">
@@ -49,6 +52,9 @@ let currentusername = currentUser.userName
                     </template>
                     <template v-slot:description>
                         Here is a list of friendly fixture, date, time, kit and location. It also allows you to put your name down for selection for a given fixture.
+                    </template>
+                    <template v-slot:link>
+                        <FormRouter route="cpw" display="Admin" />  
                     </template>
                 </ServiceCard>
             </div>

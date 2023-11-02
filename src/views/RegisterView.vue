@@ -5,7 +5,7 @@
   import { minLength } from '@vuelidate/validators';
   import { currentUser } from '@/stores/currentUserStore.js'
   import { service } from '@/stores/serviceStore.js'
-  import { ref, onMounted,reactive, computed, inject } from "vue";
+  import { ref, onMounted, reactive, computed, inject } from "vue";
 
   import PageTitle  from '@/components/PageTitle.vue'
   import FormRow from '@/components/FormRow.vue'
@@ -37,6 +37,7 @@
   let serviceUrl = service.url;
   let cryptoKey = service.key;
   let cryptoIv = service.iv;
+  let reg = service.reg;
 
   let userErrorMessage = ref('');
 
@@ -52,7 +53,7 @@
 
   function validPassword(pw)
   {
-    let validationPattern = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$");
+    let validationPattern = new RegExp(reg);
     if(validationPattern.test(pw)) return true;
     return false;
   }

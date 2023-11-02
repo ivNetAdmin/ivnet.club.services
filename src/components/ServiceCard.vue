@@ -16,10 +16,10 @@ function getService(link)
 
 <template>
     <div
-        class="mx-3 mt-6 flex flex-col rounded-lg cursor-pointer
+        class="mx-3 mt-6 flex flex-col  rounded-lg cursor-pointer
         bg-gray-100 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]
         dark:bg-neutral-700 sm:shrink-0 sm:grow sm:basis-0">
-            <div class="p-6">
+            <div class="pt-6 px-6 pb-3 flex flex-col justify-between flex-1">
                 <div @click="getService(link)">
                     <div class="flex justify-left">
                         <slot name="icon"/>
@@ -27,14 +27,17 @@ function getService(link)
                         {{ title }}
                         </h5>
                     </div>
-                    <p class="mb-1 mt-2 text-base text-neutral-600 dark:text-neutral-200">
+                    <p class="mt-2 text-base text-neutral-600 dark:text-neutral-200">
                         <slot name="description" />
                     </p>
                 </div>
-                <p class="mb-4 mt-1 text-base text-neutral-600 dark:text-neutral-200">
+            </div>
+            <footer class="ml-6 mb-3"  >
+                <p class="text-base text-neutral-600 dark:text-neutral-200">
                     <slot name="link" />
                 </p>
-            </div>
+            </footer>
       
     </div>
 </template>
+
