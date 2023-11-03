@@ -88,7 +88,7 @@
         }
       });
     }else{
-      await fetch(serviceUrl + 'users/email/'+currentUser.email+'/clubcode/'+currentUser.clubCode.toUpperCase())
+      await fetch(serviceUrl + 'members/email/'+currentUser.email+'/clubcode/'+currentUser.clubCode.toUpperCase())
         .then(response =>{
                if(response.ok)
                {
@@ -110,7 +110,7 @@
           }else{
             if(currentUser.pw==currentUser.rptpw)
             {
-              await fetch(serviceUrl + 'users', {
+              await fetch(serviceUrl + 'members', {
                 method: "POST",
                 body: JSON.stringify({
                   "id": uuid.v1(),

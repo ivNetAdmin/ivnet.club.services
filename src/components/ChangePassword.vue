@@ -63,7 +63,7 @@
   {
     if(currentUser===null || currentUser.id === '') router.push({ name: 'home' });
 
-    fetch(serviceUrl+'users/'+currentUser.id)
+    fetch(serviceUrl+'members/'+currentUser.id)
             .then(response =>{
                if(response.ok)
                {
@@ -140,7 +140,7 @@
             {
                 if(currentUser.pw==currentUser.rptpw)
                 {
-                    fetch(serviceUrl+'users/'+currentUser.id, {
+                    fetch(serviceUrl+'members/'+currentUser.id, {
                         method: "PATCH",
                         body: JSON.stringify({
                         "id": currentUser.id,

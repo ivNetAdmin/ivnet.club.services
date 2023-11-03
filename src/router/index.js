@@ -64,6 +64,12 @@ const router = createRouter({
       name: 'cpw',
       beforeEnter : guardMyroute,
       component: () => import('../views/ChangePasswordView.vue')
+    },
+    {
+      path: '/clubadmin',
+      name: 'clubadmin',
+      beforeEnter : guardMyroute,
+      component: () => import('../views/ClubAdminView.vue')
     }
   ]
 })

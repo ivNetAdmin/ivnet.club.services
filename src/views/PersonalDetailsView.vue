@@ -26,7 +26,7 @@ onMounted(() => {
   {
     if(currentUser===null || currentUser.id === '') router.push({ name: 'home' });
 
-    fetch(serviceUrl+'users/'+currentUser.id)
+    fetch(serviceUrl+'members/'+currentUser.id)
             .then(response =>{
                if(response.ok)
                {
@@ -62,7 +62,7 @@ onMounted(() => {
 
   function updatePersonalDetails()
   {
-        fetch(serviceUrl + 'users/'+userDetail.id, {
+        fetch(serviceUrl + 'members/'+userDetail.id, {
             method: "PATCH",
             body: JSON.stringify({
             "id": userDetail.id,
