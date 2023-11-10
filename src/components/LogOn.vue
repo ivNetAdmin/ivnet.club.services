@@ -37,7 +37,7 @@
 
     function logOn(){
 
-       fetch(serviceUrl+'users/username/'+currentUser.userName)
+       fetch(serviceUrl+'members/username/'+currentUser.userName)
             .then(response =>{
                if(response.ok)
                {

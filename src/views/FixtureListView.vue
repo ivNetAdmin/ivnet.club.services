@@ -10,7 +10,7 @@ import PageTitle  from '@/components/PageTitle.vue'
     <div class="flex flex-col items-center justify-center m-6">
         <div class="sm:w-3/4 md:w-3/4 w-full">
             <PageTitle name="Friendly Fixture List">
-                Select fixture to update your availability
+                Please select fixture to update your availability
             </PageTitle>   
             
             <div class="">

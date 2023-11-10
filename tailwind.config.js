@@ -6,8 +6,8 @@ module.exports = {
     
     extend: {
       colors: {
-        'club-background': '#0b2447',
-        'text-primary-600': '#A5D7E8'
+        'cs-background': '#0b2447',
+        'cs-font': '#A5D7E8'
       },
     },
   },
@@ -16,7 +16,3 @@ module.exports = {
   },
   plugins: [],
 }
-
-
-
-

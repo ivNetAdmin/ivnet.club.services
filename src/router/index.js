@@ -1,71 +1,31 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import { currentUser } from '@/stores/currentUserStore.js'
+import { createRouter, createWebHistory } from 'vue-router';
 
-function guardMyroute(to, from, next)
-{
- if(currentUser.authenticated != 'true') 
- {
-  next('/'); // go to login
- } 
- else
- {
-  next(); // allow to enter route
- }
-}
+import { useAuthStore } from '@/stores';
+import { Home } from '@/views';
+import accountRoutes from './account.routes';
+import serviceRoutes from './service.routes';
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView
-    },
-    {
-      path: '/register',
-      name: 'register',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/RegisterView.vue')
-    },
-    {
-      path: '/sandbox',
-      name: 'sandbox',
-      component: () => import('../views/SandBoxView.vue')
-    },
-    {
-      path: '/services',
-      name: 'services',
-      beforeEnter : guardMyroute,
-      component: () => import('../views/ServicesView.vue')
-    },
-    {
-      path: '/personaldetails',
-      name: 'personaldetails',
-      beforeEnter : guardMyroute,
-      component: () => import('../views/PersonalDetailsView.vue')
-    },
-    {
-      path: '/rinkbooking',
-      name: 'rinkbooking',
-      beforeEnter : guardMyroute,
-      component: () => import('../views/RinkBookingView.vue')
-    },
-    {
-      path: '/fixturelist',
-      name: 'fixturelist',
-      beforeEnter : guardMyroute,
-      component: () => import('../views/FixtureListView.vue')
-    },
-    {
-      path: '/cpw',
-      name: 'cpw',
-      beforeEnter : guardMyroute,
-      component: () => import('../views/ChangePasswordView.vue')
+export const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+    linkActiveClass: 'active',
+    routes: [
+        { path: '/', component: Home },
+        { ...accountRoutes },
+        { ...serviceRoutes },
+        // catch all redirect to home page
+        { path: '/:pathMatch(.*)*', redirect: '/' }
+    ]
+});
+
+router.beforeEach(async (to) => {
+
+    // redirect to login page if not logged in and trying to access a restricted page 
+    const publicPages = ['/account/login', '/account/register'];
+    const authRequired = !publicPages.includes(to.path);
+    const authStore = useAuthStore();
+
+    if (authRequired && !authStore.user) {
+        authStore.returnUrl = to.fullPath;
+        return '/account/login';
     }
-  ]
-})
-
-export default router
+});
