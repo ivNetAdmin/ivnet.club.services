@@ -1,4 +1,6 @@
-import { Layout, Login, Register } from '@/views/account';
+
+import { Layout } from '@/views';
+import { Login, Register } from '@/views/account';
 
 export default {
     path: '/account',

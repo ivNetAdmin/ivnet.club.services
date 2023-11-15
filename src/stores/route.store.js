@@ -10,7 +10,6 @@ export const useRouteStore = defineStore({
     }),
     actions: {
         async setup(name) {
-                
             try{
                 switch(name)
                 {
@@ -31,6 +30,12 @@ export const useRouteStore = defineStore({
                         this.pageName = "Club Services";
                         this.backIcon = true;
                         this.returnPage = "login";
+                        break;
+                    case "my-information":
+                        this.instructions = "Please enter your details";
+                        this.pageName = "My Information";
+                        this.backIcon = true;
+                        this.returnPage = "service-list";
                         break;
                 }
             }catch (error){

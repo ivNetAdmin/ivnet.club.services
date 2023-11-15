@@ -19,7 +19,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <header class=" border-green-600 sm:w-3/4 md:w-1/3">
+    <header class="mt-6 flex justify-center">
         <Pagetitle 
         :returnPage="routeStore.returnPage"
         :name="routeStore.pageName"
@@ -27,7 +27,7 @@ onMounted(() => {
             {{ routeStore.instructions }}
         </Pagetitle>
     </header>
-    <body class=" border-red-600 sm:w-3/4 md:w-1/3 w-full">
+    <body>
     <router-view /> 
     </body> 
 </template>

@@ -3,6 +3,7 @@
 import { Field } from 'vee-validate';
 defineProps({
     name: String,
+    value: String,
     display: String,
     type: String,
     msg: String,
@@ -20,6 +21,7 @@ defineProps({
         :name="name" 
         :type="type" 
         :disabled="isClubCodeInValid"
+        :value="value"
         class="block py-2.5 px-0 w-full text-sm text-gray-300 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
         placeholder=" "/>
         <div class="text-red-600 text-xs">{{ msg }}</div>
