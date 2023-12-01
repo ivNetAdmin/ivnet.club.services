@@ -80,9 +80,6 @@ async function onSubmit(values) {
 
     const { clubcode, username, email, password } = values;
     await authStore.register(clubcode, username, email, encryptPw(password));
-
-    const { user } = useAuthStore();
-    await clubStore.getClub(user.clubCode);
     
     router.push('/services/list');
 }
@@ -105,26 +102,26 @@ onMounted( async () => {
 </script>
 
 <template>
-   
-    <div class="">
-        <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
-            <div class="relative z-0 w-full mb-6 group">
+  <div class="max-w-[350px] min-w-[348px]">
+        <Form class="" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+            <div class="flex flex-col gap-3 mt-4">
+                <div class="relative z-0 w-full group">
                 <FormField name="clubcode" display="Club Code" type="text" :msg="errors.clubcode" 
                 tooltip="A code givent to you by your club" />
             </div>
-            <div class="relative z-0 w-full mb-6 group">
+            <div class="relative z-0 w-full group">
                 <FormField name="username" display="Username" type="text" :msg="errors.username" 
                 tooltip="Yo can make up a username rather than an eMail to log in" 
                 :alttooltip="alttooltip"
                 :isClubCodeInValid = "isClubCodeInValid"/>
             </div>
-            <div class="relative z-0 w-full mb-6 group">
+            <div class="relative z-0 w-full group">
                 <FormField name="email" display="eMail" type="email" :msg="errors.email" 
                 tooltip="Your eMail must be valid and unique" 
                 :alttooltip="alttooltip"
                 :isClubCodeInValid = "isClubCodeInValid"/>
             </div>
-            <div class="relative z-0 w-full mb-6 group">
+            <div class="relative z-0 w-full group">
                 <FormField name="password" display="Password" type="password" :msg="errors.password" 
                 tooltip="Length 6+, uppercase, lowercase, numbers, special characters" 
                 :alttooltip="alttooltip"
@@ -136,12 +133,14 @@ onMounted( async () => {
                 :alttooltip="alttooltip"
                 :isClubCodeInValid = "isClubCodeInValid"/>
             </div>
-            <div class="relative z-0 w-full mb-6 group">
+            <div class="relative z-0 w-full mt-2 group">
                 <button
                 :disabled="isClubCodeInValid"
                 :class="{ 'opacity-25 cursor-not-allowed': isClubCodeInValid }"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Log On</button>
             </div>
+        </div>
+   
         </Form>
     </div>
 </template>

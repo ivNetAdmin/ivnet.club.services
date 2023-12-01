@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
-
 import { fetchWrapper } from '@/helpers';
+
+import { useClubStore } from '@/stores';
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/members`;
 
@@ -17,6 +18,9 @@ export const useAuthStore = defineStore({
             try{
                 const loginUser = await fetchWrapper.get(`${baseUrl}/authenticate/${username}/${password}`); 
                 this.user = loginUser;
+                const clubStore = useClubStore();
+                clubStore.getClub(loginUser.clubCode);
+
             }catch (error){
                 alert(error)
             }
@@ -24,13 +28,25 @@ export const useAuthStore = defineStore({
 
         async register(clubcode, username, email, password) {
             try{
-                const loginUser =  await fetchWrapper.post(`${baseUrl}`, { clubcode, username, email, password});
+                const loginUser =  await fetchWrapper.post(`${baseUrl}`, {clubcode, username, email, password});
                 this.user = loginUser;
+                const clubStore = useClubStore();
+                clubStore.getClub(loginUser.clubCode);
+
             }catch (error){
                 alert(error)
             }
         },
      
+        async update(fullname, telephone, dietary, medical) {
+            try{
+                const loginUser = await fetchWrapper.patch(`${baseUrl}/${this.user.id}`, {fullname, telephone, dietary, medical});
+                this.user = loginUser;
+            }catch (error){
+                alert(error)
+            }
+        },
+        
         async getClubEmails(clubcode){
             try{
                 var members = await fetchWrapper.get(`${baseUrl}/clubcode/${clubcode}`);  
