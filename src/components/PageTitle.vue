@@ -1,18 +1,28 @@
 <script setup>
 
+import { computed } from "vue";
+import { useRouter } from 'vue-router';
+
 import { useAuthStore } from '@/stores';
 import { useClubStore } from '@/stores';
-
-import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const authStore = useAuthStore();
 const clubStore = useClubStore();
 
+const adminPage = computed(() => {
+    return router.currentRoute.value.name.includes('admin');
+});
+
+const titleColour = computed(() => {
+    if(router.currentRoute.value.name.includes('admin')) return 'text-red-600';
+    return 'text-sky-600';
+});
+
 defineProps({
     name: String,
     backIcon: Boolean,
-    returnPage : String
+    returnPage : String 
 });
 
 function backTo(page)
@@ -46,7 +56,7 @@ function backTo(page)
 </div>
 
     <div class="flex mt-2 mb-2">
-        <div class="text-sm text-sky-600 pt-2">{{name}}</div>
+        <div class="text-sm pt-2" :class="titleColour">{{name}} </div>
         <div v-if="authStore.user" class="border border-sky-900 rounded-full pt-1 pb-1 pl-2 pr-2 ml-2 cs-background">{{ clubStore.club.name }}</div>
     </div>
     <div class="text-sm text-gray-300"><slot/></div>

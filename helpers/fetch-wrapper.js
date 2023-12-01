@@ -15,7 +15,13 @@ function request(method) {
         };
         if (body) {
             requestOptions.headers['Content-Type'] = 'application/json';
-            requestOptions.body = JSON.stringify(body);
+            //requestOptions.headers['Content-Type'] = 'multipart/form-data';
+            requestOptions.body = JSON.stringify({
+                "fullname": "Brian Paske",
+                "telephone": "07931 706 799",
+                "dietary": "None",
+                "medical": "Gout"
+              });
         }
         return fetch(url, requestOptions).then(handleResponse);
     }

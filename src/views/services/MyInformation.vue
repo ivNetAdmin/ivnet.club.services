@@ -18,7 +18,7 @@ async function onSubmit(values) {
 
 <template>
     <div class="max-w-[350px] min-w-[348px]">
-          <Form class="" @submit="onSubmit" :validation-schema="schema">
+          <Form class="" @submit="onSubmit">
               <div class="flex flex-col gap-3 mt-4">
                 <div class="relative z-0 w-full group">
                     <FormField name="fullname" display="Full Name" type="text" :value="authStore.user.fullname"
