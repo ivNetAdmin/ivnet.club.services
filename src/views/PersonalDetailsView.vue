@@ -88,16 +88,16 @@ onMounted(() => {
             </PageTitle>   
             <form @submit.prevent="updatePersonalDetails">
                 <div class="flex flex-col justify-center items-center">
-                    <FormRow name="fullname" display="fullname" type="text" :value="userDetail.fullname">
+                    <FormRow store="user" name="fullname" display="fullname" type="text" :value="userDetail.fullname">
                         This will be used for the members handbook  
                     </FormRow>
-                    <FormRow name="telephone" display="Telephone" type="text" :value="userDetail.telephone">
+                    <FormRow store="user" name="telephone" display="Telephone" type="text" :value="userDetail.telephone">
                         This will be used for the members handbook
                     </FormRow>
-                    <FormRow name="dietary" display="Dietary Information" type="text" :value="userDetail.dietary">
+                    <FormRow store="user" name="dietary" display="Dietary Information" type="text" :value="userDetail.dietary">
                         This will be used by the catering team
                     </FormRow>
-                    <FormRow name="medical" display="Medical Information" type="text" :value="userDetail.medical">
+                    <FormRow store="user" name="medical" display="Medical Information" type="text" :value="userDetail.medical">
                         This will be used by team captains and match organisers
                     </FormRow>
                 </div>

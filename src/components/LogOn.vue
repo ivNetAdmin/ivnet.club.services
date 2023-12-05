@@ -105,8 +105,8 @@
          </PageTitle>        
          <form @submit.prevent="logOn">
             <div class="flex flex-col justify-center items-center">
-               <FormRow  @keydown="clearInput()"  name="userName" display="Username or eMail" type="text" required="true" />
-               <FormRow name="pw" display="Password" type="password" required="true" />
+               <FormRow store="user" @keydown="clearInput()"  name="userName" display="Username or eMail" type="text" required="true" />
+               <FormRow store="user" name="pw" display="Password" type="password" required="true" />
             </div>
             <FormButton type="submit">Log On</FormButton>          
             <p class="mt-6 text-sm">If you have not registed to use these services and have been given a Club Code, then please 

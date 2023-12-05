@@ -201,7 +201,7 @@
         </PageTitle>       
         <form @submit.prevent="register">
             <div class="flex flex-col justify-center items-center">
-              <FormRow 
+              <FormRow store="user"
               @change="clubCodeLookup" 
               @keydown="clearInput('code')" 
               name="clubCode" 
@@ -212,10 +212,10 @@
               :msg="codeValidMessage">
                 A code given to you by your club
               </FormRow> 
-              <FormRow name="username" display="User name" type="text">
+              <FormRow store="user" name="username" display="User name" type="text">
                 Make up a username rather than an eMail to log on
               </FormRow>
-              <FormRow 
+              <FormRow store="user"
               @keydown="clearInput('email')" 
               name="email" 
               display="Email" 
@@ -224,7 +224,7 @@
               :msg="emailValidMessage">
                 Your eMail must be valid and unique
               </FormRow>
-              <FormRow 
+              <FormRow store="user"
               @keydown="clearInput('pw')"  
               name="pw" 
               display="Password" 
@@ -233,7 +233,7 @@
               :msg="pwValidMessage">
                 Length 6+, uppercase, lowercase, numbers, special characters
               </FormRow>
-              <FormRow 
+              <FormRow store="user"
               @keydown="clearInput('rptpw')" 
               name="rptpw" 
               display="Confirm Password" 

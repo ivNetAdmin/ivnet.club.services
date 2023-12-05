@@ -1,22 +1,34 @@
 <script setup>
     import { currentUser } from '@/stores/currentUserStore.js'
     import { userDetail } from '@/stores/userDetailStore.js'
+    
+    import { useFixtureStore } from '@/stores';
+    const fixtureStore = useFixtureStore();   
+  
 
-    defineProps({
+   const props = defineProps({
         name: String,
         display: String,
         type: String,
         required: Boolean,
         toupper: String,
         msg: String,
-        value: String
+        value: String,
+        store: String
     })
 
     function setUserProperty(e)
     {
         let inputVal = e.target
-        currentUser.updateProp(inputVal.name, inputVal.value)
-        userDetail.updateProp(inputVal.name, inputVal.value)
+        switch(props.store)
+        {
+            case 'user':
+                currentUser.updateProp(inputVal.name, inputVal.value);
+                userDetail.updateProp(inputVal.name, inputVal.value);
+                break;
+            case 'fixture':
+                fixtureStore.updateProp(inputVal.name, inputVal.value);
+        }
     }
 </script>
 

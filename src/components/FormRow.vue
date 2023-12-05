@@ -10,13 +10,14 @@
         required: Boolean,
         toupper: String,
         msg: String,
-        value: String
+        value: String,
+        store: String
     })
 </script>
 
 <template>
     <div class="relative z-0 w-full mb-6 group">
-        <FormTextInput :name="name" :display="display" :type="type" :required="required" :msg="msg" :toupper="toupper" :value="value"/>
+        <FormTextInput :name="name" :display="display" :type="type" :required="required" :msg="msg" :toupper="toupper" :value="value" :store="store"/>
         <FormToolTip>
             <slot />
         </FormToolTip>  
