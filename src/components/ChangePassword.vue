@@ -175,9 +175,9 @@
          <form @submit.prevent="changePassword">
             <div class="flex flex-col justify-center items-center">
 
-                <FormRow name="oldpw" display="Old Password" type="password" required="true"/>
+                <FormRow store="user" name="oldpw" display="Old Password" type="password" required="true"/>
 
-                <FormRow 
+                <FormRow store="user"
                 @keydown="clearInput('pw')"  
                 name="pw" 
                 display="New Password" 
@@ -187,7 +187,7 @@
                     Length 6+, uppercase, lowercase, numbers, special characters
                 </FormRow>
              
-               <FormRow 
+               <FormRow store="user"
                 @keydown="clearInput('rptpw')" 
                 name="rptpw" 
                 display="Confirm Password" 
