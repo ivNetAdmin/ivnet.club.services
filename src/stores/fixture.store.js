@@ -8,6 +8,7 @@ export const useFixtureStore = defineStore({
     state: () => ({
         fixtures: null,
         fixture: null,
+        deleteme: ''
     }),
     actions: {
         updateProp(propName, value){
@@ -35,9 +36,13 @@ export const useFixtureStore = defineStore({
                     this.fixture.rinks = value
                     break;                
                 case 'postcode':
-                    this.fixture.postcode = value
+                    this.fixture.postCode = value
                     break;
             }
+        },
+        async setDelete()
+        {
+            this.deleteme = 'checked'
         },
         async getFixtures() {
             try{
@@ -48,24 +53,57 @@ export const useFixtureStore = defineStore({
         },
         async getFixture(id)
         {
-            try{
+            try{                
                 const fixture = await fetchWrapper.get(`${baseUrl}/${id}`); 
                 this.fixture = fixture;
+                if(id==0) this.clearInput()
             }catch (error){
                 alert(error)
             }
         },
         async updateFixture()
         {
-            fetch(baseUrl + '/'+this.fixture.id, {
-                method: "PATCH",
+            var action = "PATCH"
+            var url = baseUrl
+            if(this.fixture.id==null)
+            {
+                action = "POST"
+                this.fixture.id='0'
+            }
+
+            if(this.deleteme=='checked')
+            {
+                url = baseUrl + '/'+this.fixture.id
+                this.deleteme = ''
+                action = "DELETE"                
+            }
+
+            if(action=="PATCH")
+            {
+                url = baseUrl + '/'+this.fixture.id
+            }
+
+            fetch(url, {
+                method: action,
                 body: JSON.stringify(
                     this.fixture
                 ),
                 headers: {
                     "Content-type": "application/json"
                 }
-            }).then(this.getFixtures())
+            }).then(this.getFixtures()).then(this.clearInput())
+        },
+        clearInput()
+        {
+            this.fixture.date = ''
+            this.fixture.time = ''
+            this.fixture.competition = ''
+            this.fixture.opponent = ''
+            this.fixture.homeOrAway = ''
+            this.fixture.kit = ''
+            this.fixture.rinks = ''
+            this.fixture.postCode = ''
+            this.deleteme = ''
         }
     }
 });
