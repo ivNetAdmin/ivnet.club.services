@@ -7,7 +7,7 @@ import serviceRoutes from './service.routes';
 import adminRoutes from './admin.routes';
 
 export const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHistory(),
     linkActiveClass: 'active',
     routes: [
         { path: '/', component: Home },
@@ -15,10 +15,12 @@ export const router = createRouter({
         { ...serviceRoutes },
         { ...adminRoutes },
         // catch all redirect to home page
+        { path: '/:pathMatch(.*)', redirect: '/' },
         { path: '/:pathMatch(.*)*', redirect: '/' }
     ]
 });
 
+//import.meta.env.BASE_URL
 router.beforeEach(async (to) => {
 
     // redirect to login page if not logged in and trying to access a restricted page 

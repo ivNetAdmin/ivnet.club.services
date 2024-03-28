@@ -52,10 +52,10 @@ function viewFixtures()
             </div>
         </div>
     </div>
-    <div class="h-full pt-12 p-4" v-if="fixtureStore.fixtures">
-        <div class="grid gap-14 md:grid-cols-3 md:gap-5">
-            <FixtureList :fixtures="fixtureStore.fixtures" />
-            <FixtureEdit :fixture="fixtureStore.fixture" />
+    <div class="h-full pt-12 p-4 m-4" v-if="fixtureStore.fixtures">
+        <div class="grid gap-14 md:grid-cols-2 md:gap-5">
+            <FixtureList :fixtures="fixtureStore.fixtures" class="m-4"/>
+            <FixtureEdit :fixture="fixtureStore.fixture" class="m-4" v-if="fixtureStore.fixture"/>
         </div>
     </div>
 </template>

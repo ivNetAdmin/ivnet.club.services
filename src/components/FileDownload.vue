@@ -8,7 +8,7 @@
     
     function downloadTemplate()
     {
-    const link = document.createElement('a');
+      const link = document.createElement('a');
       link.href = templateUrl;
      // link.setAttribute('download',props.file); 
       document.body.appendChild(link);
