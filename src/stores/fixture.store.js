@@ -19,6 +19,9 @@ export const useFixtureStore = defineStore({
                 case 'time':
                     this.fixture.time = value
                     break;
+                case 'competition':
+                    this.fixture.competition = value
+                    break;
                 case 'opponent':
                     this.fixture.opponent = value
                     break;            
@@ -28,8 +31,11 @@ export const useFixtureStore = defineStore({
                 case 'kit':
                     this.fixture.kit = value
                     break;
-                case 'trips':
-                    this.fixture.trips = value
+                case 'rinks':
+                    this.fixture.rinks = value
+                    break;                
+                case 'postcode':
+                    this.fixture.postcode = value
                     break;
             }
         },

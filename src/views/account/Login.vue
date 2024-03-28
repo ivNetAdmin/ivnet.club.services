@@ -43,7 +43,7 @@ function encryptPw(pw)
                     <FormField name="username" display="Username or eMail" type="text" :msg="errors.username" tooltip="" />
                 </div>
                 <div class="relative z-0 w-fullgroup">
-                    <FormField name="password" display="Password" type="password" :msg="errors.password" tooltip="" />Tlbc01$
+                    <FormField name="password" display="Password" type="password" :msg="errors.password" tooltip="" />
                 </div>
                 <div class="relative z-0 w-full mt-2 group">
                     <button
