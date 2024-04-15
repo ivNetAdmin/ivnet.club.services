@@ -38,6 +38,9 @@ export const useFixtureStore = defineStore({
                 case 'postcode':
                     this.fixture.postCode = value
                     break;
+                case 'result':
+                    this.fixture.result = value
+                    break;
             }
         },
         setDelete()
@@ -103,6 +106,7 @@ export const useFixtureStore = defineStore({
             this.fixture.kit = ''
             this.fixture.rinks = ''
             this.fixture.postCode = ''
+            this.fixture.result = ''
             this.deleteme = ''
         }
     }

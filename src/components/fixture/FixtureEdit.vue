@@ -37,6 +37,9 @@ const fixtureStore = useFixtureStore();
             <FormRow store="fixture" name="postcode" display="PostCode" type="text" :value="fixtureStore.fixture ? fixtureStore.fixture.postCode : null">
                 PostCode
             </FormRow>
+            <FormRow store="fixture" name="result" display="Result" type="text" :value="fixtureStore.fixture ? fixtureStore.fixture.result : null">
+                Result
+            </FormRow>
         </div>
 
         <div class="grid gap-14 md:grid-cols-2 md:gap-5">

@@ -20,6 +20,7 @@ const fixtureStore = useFixtureStore();
             <th class="text-start align-text-top text-gray-500">Kit</th>
             <th class="text-start align-text-top text-gray-500">Rinks</th>
             <th class="text-start align-text-top text-gray-500">PostCode</th>
+            <th class="text-start align-text-top text-gray-500">Result</th>
             <th class="text-start align-text-top text-gray-500 pl-2">
                 <button 
                 @click = fixtureStore.getFixture(0)
@@ -36,6 +37,7 @@ const fixtureStore = useFixtureStore();
             <td class="align-text-top text-gray-100">{{ fixture.kit }}</td> 
             <td class="align-text-top text-gray-100">{{ fixture.rinks }}</td> 
             <td class="align-text-top text-gray-100">{{ fixture.postCode }}</td> 
+            <td class="align-text-top text-gray-100">{{ fixture.result }}</td> 
             <td class="pl-2"><button 
                 @click = fixtureStore.getFixture(fixture.id)
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1 md:py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
